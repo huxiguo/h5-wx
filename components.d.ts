@@ -9,10 +9,15 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    403: typeof import('./src/components/ErrorMessage/403.vue')['default']
+    404: typeof import('./src/components/ErrorMessage/404.vue')['default']
+    500: typeof import('./src/components/ErrorMessage/500.vue')['default']
+    Login: typeof import('./src/components/Login/index.vue')['default']
     NotWechat: typeof import('./src/components/notWechat/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     VanButton: typeof import('vant/es')['Button']
+    VanEmpty: typeof import('vant/es')['Empty']
     VanNavBar: typeof import('vant/es')['NavBar']
     VanNumberKeyboard: typeof import('vant/es')['NumberKeyboard']
     VanTabbar: typeof import('vant/es')['Tabbar']
