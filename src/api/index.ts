@@ -23,7 +23,6 @@ const config = {
 class RequestHttp {
 	service: AxiosInstance
 	public constructor(config: AxiosRequestConfig) {
-		const userStore = useUserStore()
 		// instantiation
 		this.service = axios.create(config)
 
@@ -34,6 +33,7 @@ class RequestHttp {
 		 */
 		this.service.interceptors.request.use(
 			(config: InternalAxiosRequestConfig) => {
+				const userStore = useUserStore()
 				// token
 				if (userStore.accessToken && userStore.refreshToken) {
 					config.headers['access_token'] = userStore.accessToken
@@ -52,6 +52,7 @@ class RequestHttp {
 		 */
 		this.service.interceptors.response.use(
 			(response: AxiosResponse) => {
+				const userStore = useUserStore()
 				const { data, headers } = response
 				const accessToken = headers['access_token']
 				const refreshToken = headers['refresh_token']

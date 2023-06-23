@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { useViewerStore } from '@/stores/modules/viewer'
 import { useUserStore } from '@/stores/modules/user'
 import { showConfirmDialog, showNotify } from 'vant'
 
-const viewerStore = useViewerStore()
 const userStore = useUserStore()
 
 // 获取搜索结果中用户的班级名称
@@ -11,7 +9,7 @@ const getClassName = (unitsName: string) => {
 	const data = unitsName.split('|')
 	return data[data.length - 1]
 }
-
+;``
 // 判断该用户是否已被绑定
 const isBind = (userId: number) => {
 	return userStore.BoundUserInfo.find((item: any) => item.userId === userId)
