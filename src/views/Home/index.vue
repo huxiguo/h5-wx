@@ -23,14 +23,12 @@ const hand2 = async () => {
 onMounted(async () => {
 	const url = location.href
 	const code = url.split('?')[1]?.split('=')[1]
-	if (!viewerStore.openId) {
-		const data = await LoginApi()
-		location.href = data as any
-	}
 	if (code && !viewerStore.openId) {
 		const { result } = await viewerStore.loginCallBackAction({ code })
-		console.log(result)
 		viewerStore.openId = result.openId
+	} else if (!viewerStore.openId) {
+		const data = await LoginApi()
+		location.href = data as any
 	}
 	console.log('pinia中存储的openId', viewerStore.openId)
 })

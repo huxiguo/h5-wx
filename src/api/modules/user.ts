@@ -1,13 +1,16 @@
 import http from '..'
+import type { User } from '@/global/user'
 
 // 获取被监视人信息
 export const getBoundUser = () => {
-	return http.get('/wx-server/getBoundUser')
+	return http.get<User.ResUserInfo[]>('/wx-server/getBoundUser')
 }
 
 // 根据字段查找用户
 export const searchUserByKeyword = (keyword: string) => {
-	return http.get(`/wx-server/searchUserByKeyword/${keyword}`)
+	return http.get<User.ResUserInfo[]>(
+		`/wx-server/searchUserByKeyword/${keyword}`
+	)
 }
 
 // 绑定被监视人
