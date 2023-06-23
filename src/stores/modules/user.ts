@@ -5,6 +5,8 @@ import {
 	bindBeViewer,
 	unbindBeViewer
 } from '@/api/modules/user'
+import type { User } from '@/global/user'
+
 export const useUserStore = defineStore(
 	'user',
 	() => {
@@ -13,9 +15,9 @@ export const useUserStore = defineStore(
 		// 上次刷新token的时间戳
 		const lastRefreshTokenTime = ref(0)
 		// 已绑定人的信息
-		const BoundUserInfo = ref<any>([])
+		const BoundUserInfo = ref<User.ResUserInfo[]>([])
 		// 用户搜索结果
-		const searchResultUserList = ref<any>([])
+		const searchResultUserList = ref<User.ResUserInfo[]>([])
 		// 获取已绑定人信息
 		const getBoundUserAction = async () => {
 			const { result } = await getBoundUser()
@@ -25,6 +27,7 @@ export const useUserStore = defineStore(
 		const searchUserByKeywordAction = async (keyword: string) => {
 			const { result } = await searchUserByKeyword(keyword)
 			searchResultUserList.value = result
+			console.log(result)
 		}
 		// 绑定被监视人
 		const bindBeViewerAction = async (userId: number) => {
