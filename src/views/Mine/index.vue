@@ -1,5 +1,120 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useViewerStore } from '@/stores/modules/viewer'
+import { useUserStore } from '@/stores/modules/user'
+import { showConfirmDialog, showNotify, showToast } from 'vant'
+
+const viewerStore = useViewerStore()
+const userStore = useUserStore()
+
+onMounted(() => {
+	viewerStore.getViewerInfoAction()
+	userStore.getBoundUserAction()
+})
+
+// 解绑按钮点击回调
+const handleUnbindClick = (id: number) => {
+	showConfirmDialog({
+		title: '提示',
+		message: '是否继续解绑操作？'
+	})
+		.then(async () => {
+			await userStore.unbindBeViewerAction(id)
+			showNotify({ type: 'success', message: '解绑成功' })
+			await userStore.getBoundUserAction()
+		})
+		.catch(() => {})
+}
+
+// 绑定孩子按钮回调
+const handleBindChildClick = () => {
+	location.href = '/bindChild'
+}
+
+// 获取孩子的班级名称
+const getClassName = (unitsName: string) => {
+	const data = unitsName.split('|')
+	return data[data.length - 1]
+}
+</script>
 
 <template>
-	<div>绑定孩子</div>
+	<!-- 监视人信息 -->
+	<div class="viewerInfo">
+		<span>家长姓名：{{ viewerStore.viewerInfo?.nickname }}</span>
+	</div>
+	<!-- 被监视人信息 -->
+	<div class="my-children">
+		<div class="header">
+			<span>已绑定的孩子</span>
+			<van-button type="primary" size="small" @click="handleBindChildClick"
+				>绑定孩子</van-button
+			>
+		</div>
+		<van-empty
+			description="暂无已绑定的孩子"
+			image-size="75"
+			v-if="userStore.BoundUserInfo.length === 0"
+		/>
+		<template v-else>
+			<div
+				class="child"
+				v-for="user in userStore.BoundUserInfo"
+				:key="user.userId"
+			>
+				<div class="left">
+					<span>姓名：{{ user.name }}</span>
+					<span>学号：{{ user.schNo }}</span>
+					<span>班级：{{ getClassName(user.unitsName) }}</span>
+				</div>
+				<div class="right">
+					<van-button @click="handleUnbindClick(user.userId)">解绑</van-button>
+				</div>
+			</div>
+		</template>
+	</div>
 </template>
+
+<style sc>
+.viewerInfo {
+	display: flex;
+	flex-direction: column;
+	margin: 10px;
+	padding: 15px;
+	border-radius: 10px;
+	border-bottom: 1px solid #ddd;
+	background-color: rgb(39, 174, 96);
+	color: white;
+	text-align: center;
+}
+
+.my-children {
+	padding: 10px;
+	border-top: 1px solid #ddd;
+}
+
+.my-children .header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.my-children .child {
+	display: flex;
+	margin-top: 15px;
+	padding: 15px;
+	border-radius: 10px;
+	background-color: #ddd;
+}
+
+.my-children .child .left {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.my-children .child .right {
+	display: flex;
+	align-items: center;
+}
+</style>

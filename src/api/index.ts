@@ -35,10 +35,10 @@ class RequestHttp {
 		this.service.interceptors.request.use(
 			(config: InternalAxiosRequestConfig) => {
 				// token
-				// if (userStore.accessToken && userStore.refreshToken) {
-				// 	config.headers['access_token'] = userStore.accessToken
-				// 	config.headers['refresh_token'] = userStore.refreshToken
-				// }
+				if (userStore.accessToken && userStore.refreshToken) {
+					config.headers['access_token'] = userStore.accessToken
+					config.headers['refresh_token'] = userStore.refreshToken
+				}
 				return config
 			},
 			(error: AxiosError) => {
@@ -55,17 +55,17 @@ class RequestHttp {
 				const { data, headers } = response
 				const accessToken = headers['access_token']
 				const refreshToken = headers['refresh_token']
-				// if (accessToken && refreshToken) {
-				// 	// 判断上次刷新 token 的时间是否超过 6天
-				// 	const lastRefreshTokenTime = userStore.lastRefreshTokenTime
-				// 	const nowTime = new Date().getTime()
-				// 	if (nowTime - lastRefreshTokenTime > 6 * 24 * 60 * 60 * 1000) {
-				// 		// 刷新 token
-				// 		userStore.accessToken = accessToken
-				// 		userStore.refreshToken = refreshToken
-				// 		userStore.lastRefreshTokenTime = nowTime
-				// 	}
-				// }
+				if (accessToken && refreshToken) {
+					// 判断上次刷新 token 的时间是否超过 6天
+					const lastRefreshTokenTime = userStore.lastRefreshTokenTime
+					const nowTime = new Date().getTime()
+					if (nowTime - lastRefreshTokenTime > 6 * 24 * 60 * 60 * 1000) {
+						// 刷新 token
+						userStore.accessToken = accessToken
+						userStore.refreshToken = refreshToken
+						userStore.lastRefreshTokenTime = nowTime
+					}
+				}
 				// 全局错误信息拦截（防止下载文件的时候返回数据流，没有 code 直接报错）
 				if (data.code && data.code !== ResultEnum.SUCCESS) {
 					showNotify({ type: 'danger', message: data.message })

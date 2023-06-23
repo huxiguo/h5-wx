@@ -4,6 +4,6 @@ export const LoginApi = () => {
 	return http.get('/wx/wxlogin')
 }
 
-export const test = (params: any) => {
-	return http.get('/wx/callBack', params)
+export const loginCallBack = (params: any) => {
+	return http.get<any>('/wx/callBack', params)
 }

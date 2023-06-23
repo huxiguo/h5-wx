@@ -26,6 +26,15 @@ const router = createRouter({
 			}
 		},
 		{
+			name: 'bindChild',
+			path: '/bindChild',
+			component: () => import('@/views/BindChild/index.vue'),
+			meta: {
+				title: '添加监视人',
+				requiresAuth: true
+			}
+		},
+		{
 			path: '/403',
 			name: '403',
 			component: () => import('@/components/ErrorMessage/403.vue'),

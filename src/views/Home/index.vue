@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { LoginApi, test } from '@/api/modules/login'
+import { onMounted } from 'vue'
+import { LoginApi, loginCallBack } from '@/api/modules/login'
+import { useViewerStore } from '@/stores/modules/viewer'
+
+const viewerStore = useViewerStore()
+
 const hand = async () => {
 	console.log('点击了按钮')
 	const data = await LoginApi()
@@ -10,11 +15,25 @@ const hand2 = async () => {
 	console.log('点击了按钮2')
 	// 获取url里面的code参数
 	const url = location.href
-	const code = url.split('?')[1].split('=')[1]
+	const code = url.split('?')[1]?.split('=')[1]
 	console.log(code)
-	const data = await test({ code })
+	const data = await loginCallBack({ code })
 	console.log(data)
 }
+onMounted(async () => {
+	const url = location.href
+	const code = url.split('?')[1]?.split('=')[1]
+	if (!viewerStore.openId) {
+		const data = await LoginApi()
+		location.href = data as any
+	}
+	if (code && !viewerStore.openId) {
+		const { result } = await viewerStore.loginCallBackAction({ code })
+		console.log(result)
+		viewerStore.openId = result.openId
+	}
+	console.log('pinia中存储的openId', viewerStore.openId)
+})
 </script>
 
 <template>
