@@ -1,4 +1,7 @@
-import type { PersistedStateOptions } from 'pinia-plugin-persistedstate'
+import type {
+	PersistedStateOptions,
+	StorageLike
+} from 'pinia-plugin-persistedstate'
 
 /**
  * @description pinia 持久化参数配置
@@ -6,9 +9,14 @@ import type { PersistedStateOptions } from 'pinia-plugin-persistedstate'
  * @param {Array} paths 需要持久化的 state name
  * @return persist
  * */
-const piniaPersistConfig = (key: string, paths?: string[]) => {
+const piniaPersistConfig = (
+	key: string,
+	storage: StorageLike,
+	paths?: string[]
+) => {
 	const persist: PersistedStateOptions = {
 		key,
+		storage,
 		paths
 	}
 	return persist

@@ -50,7 +50,7 @@ export const useUserStore = defineStore(
 		}
 	},
 	{
-		persist: piniaPersistConfig('user', [
+		persist: piniaPersistConfig('user', sessionStorage, [
 			'accessToken',
 			'refreshToken',
 			'lastRefreshTokenTime',

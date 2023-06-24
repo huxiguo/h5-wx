@@ -27,6 +27,9 @@ export const useViewerStore = defineStore(
 		}
 	},
 	{
-		persist: piniaPersistConfig('viewer', ['viewerInfo', 'openId'])
+		persist: piniaPersistConfig('viewer', sessionStorage, [
+			'viewerInfo',
+			'openId'
+		])
 	}
 )
