@@ -22,3 +22,8 @@ export const bindBeViewer = (userId: number) => {
 export const unbindBeViewer = (id: number) => {
 	return http.delete(`/wx-server/unbindBeViewer/${id}`)
 }
+
+// 获取出入信息
+export const getInOutInfo = (schNo: string, timestamp: string) => {
+	return http.get<any>(`/wx-server/getRecordByOne/${schNo}/${timestamp}`)
+}

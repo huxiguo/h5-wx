@@ -3,13 +3,8 @@ const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
 		{
-			name: 'login',
-			path: '/login',
-			component: () => import('@/views/Login/index.vue')
-		},
-		{
-			name: 'home',
-			path: '/',
+			name: 'info',
+			path: '/info',
 			component: () => import('@/views/Home/index.vue'),
 			meta: {
 				title: '进出记录',
@@ -18,7 +13,7 @@ const router = createRouter({
 		},
 		{
 			name: 'children',
-			path: '/children',
+			path: '/',
 			component: () => import('@/views/Mine/index.vue'),
 			meta: {
 				title: '个人主页',
@@ -76,6 +71,10 @@ const router = createRouter({
  * @description 前置守卫
  */
 router.beforeEach((to, from, next) => {
+	// 设置标题
+	if (to.meta.title) {
+		document.title = to.meta.title as string
+	}
 	next()
 })
 

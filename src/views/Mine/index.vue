@@ -1,15 +1,31 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import { useViewerStore } from '@/stores/modules/viewer'
 import { useUserStore } from '@/stores/modules/user'
 import { showConfirmDialog, showNotify } from 'vant'
+import { LoginApi } from '@/api/modules/login'
+import { showDialog } from 'vant'
 
 const viewerStore = useViewerStore()
 const userStore = useUserStore()
+const router = useRouter()
 
-onMounted(() => {
-	viewerStore.getViewerInfoAction()
-	userStore.getBoundUserAction()
+onMounted(async () => {
+	const url = location.href
+	const code = url.split('?')[1]?.split('=')[1]
+	if (code && !viewerStore.openId) {
+		const { result } = await viewerStore.loginCallBackAction({ code })
+		viewerStore.openId = result.openId
+		viewerStore.getViewerInfoAction()
+		userStore.getBoundUserAction()
+	} else if (!viewerStore.openId) {
+		showDialog({
+			title: '提示',
+			message: '您暂未授权该网页读取您的信息，请先进行授权操作'
+		}).then(async () => {
+			const data = await LoginApi()
+			location.href = data as any
+		})
+	}
 })
 
 // 解绑按钮点击回调
@@ -28,7 +44,8 @@ const handleUnbindClick = (id: number) => {
 
 // 绑定孩子按钮回调
 const handleBindChildClick = () => {
-	location.href = '/bindChild'
+	// 跳转到绑定孩子页面
+	router.push('/bindChild')
 }
 
 // 获取孩子的班级名称
@@ -43,8 +60,8 @@ const getClassName = (unitsName: string) => {
 	<div class="viewerInfo">
 		<img :src="viewerStore.viewerInfo?.avatar" class="avatar" />
 		<div class="text">
-			<span>监视人ID：{{ viewerStore.viewerInfo?.viewId }}</span>
-			<span>家长姓名：{{ viewerStore.viewerInfo?.nickname }}</span>
+			<span>监视人ID:{{ viewerStore.viewerInfo?.viewId }}</span>
+			<span>家长姓名:{{ viewerStore.viewerInfo?.nickname }}</span>
 			<span>当前绑定孩子数量：{{ userStore.BoundUserInfo.length }}</span>
 		</div>
 	</div>
