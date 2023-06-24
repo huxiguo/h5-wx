@@ -24,8 +24,6 @@ const config = {
 class RequestHttp {
 	service: AxiosInstance
 	public constructor(config: AxiosRequestConfig) {
-		const userStore = useUserStore()
-		const loadingStore = useLoadingStore()
 		// instantiation
 		this.service = axios.create(config)
 
@@ -36,6 +34,8 @@ class RequestHttp {
 		 */
 		this.service.interceptors.request.use(
 			(config: InternalAxiosRequestConfig) => {
+				const userStore = useUserStore()
+				const loadingStore = useLoadingStore()
 				// token
 				if (userStore.accessToken && userStore.refreshToken) {
 					config.headers['access_token'] = userStore.accessToken
@@ -45,6 +45,7 @@ class RequestHttp {
 				return config
 			},
 			(error: AxiosError) => {
+				const loadingStore = useLoadingStore()
 				loadingStore.showLoading = false
 				return Promise.reject(error)
 			}
@@ -56,6 +57,8 @@ class RequestHttp {
 		 */
 		this.service.interceptors.response.use(
 			(response: AxiosResponse) => {
+				const userStore = useUserStore()
+				const loadingStore = useLoadingStore()
 				const { data, headers } = response
 				const accessToken = headers['access_token']
 				const refreshToken = headers['refresh_token']
@@ -80,6 +83,7 @@ class RequestHttp {
 				return data
 			},
 			async (error: AxiosError) => {
+				const loadingStore = useLoadingStore()
 				const { response } = error
 				loadingStore.showLoading = false
 				// 请求超时 && 网络错误单独判断，没有 response

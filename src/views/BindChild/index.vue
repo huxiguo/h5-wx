@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { useViewerStore } from '@/stores/modules/viewer'
 import { useUserStore } from '@/stores/modules/user'
 import { showConfirmDialog, showNotify } from 'vant'
 
-const viewerStore = useViewerStore()
 const userStore = useUserStore()
 
 // 获取搜索结果中用户的班级名称
