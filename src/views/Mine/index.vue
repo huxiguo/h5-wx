@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 import { useViewerStore } from '@/stores/modules/viewer'
 import { useUserStore } from '@/stores/modules/user'
-import { showConfirmDialog, showNotify, showToast } from 'vant'
+import { showConfirmDialog, showNotify } from 'vant'
 
 const viewerStore = useViewerStore()
 const userStore = useUserStore()
@@ -41,7 +41,12 @@ const getClassName = (unitsName: string) => {
 <template>
 	<!-- 监视人信息 -->
 	<div class="viewerInfo">
-		<span>家长姓名：{{ viewerStore.viewerInfo?.nickname }}</span>
+		<img :src="viewerStore.viewerInfo?.avatar" class="avatar" />
+		<div class="text">
+			<span>监视人ID：{{ viewerStore.viewerInfo?.viewId }}</span>
+			<span>家长姓名：{{ viewerStore.viewerInfo?.nickname }}</span>
+			<span>当前绑定孩子数量：{{ userStore.BoundUserInfo.length }}</span>
+		</div>
 	</div>
 	<!-- 被监视人信息 -->
 	<div class="my-children">
@@ -78,14 +83,24 @@ const getClassName = (unitsName: string) => {
 <style sc>
 .viewerInfo {
 	display: flex;
-	flex-direction: column;
 	margin: 10px;
 	padding: 15px;
 	border-radius: 10px;
 	border-bottom: 1px solid #ddd;
 	background-color: rgb(39, 174, 96);
 	color: white;
-	text-align: center;
+}
+
+.viewerInfo .avatar {
+	width: 50px;
+	height: 50px;
+	margin-right: 15px;
+}
+
+.viewerInfo .text {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .my-children {

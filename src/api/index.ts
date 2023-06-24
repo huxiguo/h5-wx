@@ -12,6 +12,7 @@ import { ResultEnum } from '@/enums/httpEnum'
 import { checkStatus } from './helper/checkStatus'
 import router from '@/router'
 import { useUserStore } from '@/stores/modules/user'
+import { useLoadingStore } from '@/stores/modules/loading'
 
 const config = {
 	// 默认地址请求地址，可在 .env.** 文件中修改
@@ -24,6 +25,7 @@ class RequestHttp {
 	service: AxiosInstance
 	public constructor(config: AxiosRequestConfig) {
 		const userStore = useUserStore()
+		const loadingStore = useLoadingStore()
 		// instantiation
 		this.service = axios.create(config)
 
@@ -39,9 +41,11 @@ class RequestHttp {
 					config.headers['access_token'] = userStore.accessToken
 					config.headers['refresh_token'] = userStore.refreshToken
 				}
+				loadingStore.showLoading = true
 				return config
 			},
 			(error: AxiosError) => {
+				loadingStore.showLoading = false
 				return Promise.reject(error)
 			}
 		)
@@ -55,6 +59,7 @@ class RequestHttp {
 				const { data, headers } = response
 				const accessToken = headers['access_token']
 				const refreshToken = headers['refresh_token']
+				loadingStore.showLoading = false
 				if (accessToken && refreshToken) {
 					// 判断上次刷新 token 的时间是否超过 6天
 					const lastRefreshTokenTime = userStore.lastRefreshTokenTime
@@ -76,6 +81,7 @@ class RequestHttp {
 			},
 			async (error: AxiosError) => {
 				const { response } = error
+				loadingStore.showLoading = false
 				// 请求超时 && 网络错误单独判断，没有 response
 				if (error.message.indexOf('timeout') !== -1)
 					showNotify({ type: 'danger', message: '请求超时！请您稍后重试' })

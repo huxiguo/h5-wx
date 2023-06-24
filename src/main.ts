@@ -22,7 +22,7 @@ if (ua.indexOf('micromessenger') === -1) {
 }
 
 const app = createApp(App)
-
+app.provide('$showLoading', false)
 app.use(pinia)
 app.use(router)
 app.mount('#app')
