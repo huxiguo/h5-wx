@@ -27,7 +27,6 @@ export const useUserStore = defineStore(
 		const searchUserByKeywordAction = async (keyword: string) => {
 			const { result } = await searchUserByKeyword(keyword)
 			searchResultUserList.value = result
-			console.log(result)
 		}
 		// 绑定被监视人
 		const bindBeViewerAction = async (userId: number) => {

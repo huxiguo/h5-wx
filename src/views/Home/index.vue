@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import { LoginApi, loginCallBack } from '@/api/modules/login'
 import { useViewerStore } from '@/stores/modules/viewer'
+import { showDialog } from 'vant'
 
 const viewerStore = useViewerStore()
 
@@ -27,8 +28,13 @@ onMounted(async () => {
 		const { result } = await viewerStore.loginCallBackAction({ code })
 		viewerStore.openId = result.openId
 	} else if (!viewerStore.openId) {
-		const data = await LoginApi()
-		location.href = data as any
+		showDialog({
+			title: '提示',
+			message: '您暂未授权该网页读取您的信息，请先进行授权操作'
+		}).then(async () => {
+			const data = await LoginApi()
+			location.href = data as any
+		})
 	}
 	console.log('pinia中存储的openId', viewerStore.openId)
 })
