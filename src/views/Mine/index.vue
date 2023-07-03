@@ -2,8 +2,8 @@
 import { useViewerStore } from '@/stores/modules/viewer'
 import { useUserStore } from '@/stores/modules/user'
 import { showConfirmDialog, showNotify } from 'vant'
-import { LoginApi } from '@/api/modules/login'
 import { showDialog } from 'vant'
+import { useUrl } from '@/hooks/useUrl'
 
 const viewerStore = useViewerStore()
 const userStore = useUserStore()
@@ -32,8 +32,7 @@ onMounted(async () => {
 			title: '提示',
 			message: '您暂未授权该网页读取您的信息，请先进行授权操作'
 		}).then(async () => {
-			const data = await LoginApi()
-			location.href = data as any
+			location.href = useUrl()
 		})
 	}
 })
