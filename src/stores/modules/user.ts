@@ -3,13 +3,16 @@ import {
 	getBoundUser,
 	searchUserByKeyword,
 	bindBeViewer,
-	unbindBeViewer
+	unbindBeViewer,
+	getInOutInfo
 } from '@/api/modules/user'
 import type { User } from '@/global/user'
 
 export const useUserStore = defineStore(
 	'user',
 	() => {
+		const schNo = ref('')
+		const stuTime = ref('')
 		const accessToken = ref('')
 		const refreshToken = ref('')
 		// 上次刷新token的时间戳
@@ -19,24 +22,31 @@ export const useUserStore = defineStore(
 		// 用户搜索结果
 		const searchResultUserList = ref<User.ResUserInfo[]>([])
 		// 获取已绑定人信息
-		const getBoundUserAction = async () => {
+		async function getBoundUserAction() {
 			const { result } = await getBoundUser()
 			BoundUserInfo.value = result
 		}
 		// 根据字段查找用户
-		const searchUserByKeywordAction = async (keyword: string) => {
+		async function searchUserByKeywordAction(keyword: string) {
 			const { result } = await searchUserByKeyword(keyword)
 			searchResultUserList.value = result
 		}
 		// 绑定被监视人
-		const bindBeViewerAction = async (userId: number) => {
+		async function bindBeViewerAction(userId: number) {
 			await bindBeViewer(userId)
 		}
 		// 解绑被绑定人
-		const unbindBeViewerAction = async (id: number) => {
+		async function unbindBeViewerAction(id: number) {
 			await unbindBeViewer(id)
 		}
+		// 获取出入信息
+		async function getInOutInfoAction(schNo: string, timestamp: string) {
+			const { result } = await getInOutInfo(schNo, timestamp)
+			return result
+		}
 		return {
+			schNo,
+			stuTime,
 			accessToken,
 			refreshToken,
 			lastRefreshTokenTime,
@@ -45,11 +55,12 @@ export const useUserStore = defineStore(
 			getBoundUserAction,
 			searchUserByKeywordAction,
 			bindBeViewerAction,
-			unbindBeViewerAction
+			unbindBeViewerAction,
+			getInOutInfoAction
 		}
 	},
 	{
-		persist: piniaPersistConfig('user', sessionStorage, [
+		persist: piniaPersistConfig('user', localStorage, [
 			'accessToken',
 			'refreshToken',
 			'lastRefreshTokenTime',

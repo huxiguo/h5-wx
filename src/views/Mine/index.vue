@@ -9,9 +9,19 @@ const viewerStore = useViewerStore()
 const userStore = useUserStore()
 const router = useRouter()
 
+function getCodeFromURL(url: string) {
+	const regex = /[?&]code=([^&#]*)/
+	const match = regex.exec(url)
+	if (match && match[1]) {
+		return match[1]
+	} else {
+		return null
+	}
+}
+
 onMounted(async () => {
 	const url = location.href
-	const code = url.split('?')[1]?.split('=')[1]
+	const code = getCodeFromURL(url)
 	if (code && !viewerStore.openId) {
 		const { result } = await viewerStore.loginCallBackAction({ code })
 		viewerStore.openId = result.openId
@@ -97,14 +107,14 @@ const getClassName = (unitsName: string) => {
 	</div>
 </template>
 
-<style sc>
+<style>
 .viewerInfo {
 	display: flex;
 	margin: 10px;
 	padding: 15px;
 	border-radius: 10px;
 	border-bottom: 1px solid #ddd;
-	background-color: rgb(39, 174, 96);
+	background-color: #27ae60;
 	color: white;
 }
 

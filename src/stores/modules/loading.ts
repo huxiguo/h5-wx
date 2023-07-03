@@ -7,6 +7,6 @@ export const useLoadingStore = defineStore(
 		return { showLoading }
 	},
 	{
-		persist: piniaPersistConfig('loading', sessionStorage, ['showLoading'])
+		persist: piniaPersistConfig('loading', localStorage, ['showLoading'])
 	}
 )

@@ -11,11 +11,11 @@ export const useViewerStore = defineStore(
 		// 监视人微信id
 		const openId = ref('')
 		// 登录后的回调，获取监视人信息
-		const loginCallBackAction = (params: any) => {
+		function loginCallBackAction(params: any) {
 			return loginCallBack(params)
 		}
 		// 获取监视人信息
-		const getViewerInfoAction = async () => {
+		async function getViewerInfoAction() {
 			const { result } = await getViewerInfo()
 			viewerInfo.value = result
 		}
@@ -27,7 +27,7 @@ export const useViewerStore = defineStore(
 		}
 	},
 	{
-		persist: piniaPersistConfig('viewer', sessionStorage, [
+		persist: piniaPersistConfig('viewer', localStorage, [
 			'viewerInfo',
 			'openId'
 		])
