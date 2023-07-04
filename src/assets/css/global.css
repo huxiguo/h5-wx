@@ -8,4 +8,5 @@ body,
 :root {
 	--van-primary-color: #27ae60 !important;
 	--van-green: #27ae60 !important;
+	--van-back-top-background: #27ae60 !important;
 }

@@ -12,11 +12,20 @@ const router = createRouter({
 			}
 		},
 		{
-			name: 'children',
+			name: 'mine',
 			path: '/',
 			component: () => import('@/views/Mine/index.vue'),
 			meta: {
 				title: '个人主页',
+				requiresAuth: true
+			}
+		},
+		{
+			name: 'record',
+			path: '/record',
+			component: () => import('@/views/Record/index.vue'),
+			meta: {
+				title: '进出记录',
 				requiresAuth: true
 			}
 		},

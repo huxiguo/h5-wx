@@ -8,6 +8,10 @@
 		</div>
 	</van-overlay>
 	<RouterView />
+	<van-tabbar route placeholder safe-area-inset-bottom>
+		<van-tabbar-item to="/" icon="user-o">个人主页</van-tabbar-item>
+		<van-tabbar-item to="/record" icon="orders-o">进出记录</van-tabbar-item>
+	</van-tabbar>
 </template>
 
 <script setup lang="ts">
