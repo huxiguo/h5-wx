@@ -5,7 +5,7 @@ import type {
 	InternalAxiosRequestConfig,
 	AxiosResponse
 } from 'axios'
-import { showNotify } from 'vant'
+import { showNotify, showDialog } from 'vant'
 import axios from 'axios'
 import type { ResultData } from '@/api/interface'
 import { ResultEnum } from '@/enums/httpEnum'
@@ -13,6 +13,7 @@ import { checkStatus } from './helper/checkStatus'
 import router from '@/router'
 import { useUserStore } from '@/stores/modules/user'
 import { useLoadingStore } from '@/stores/modules/loading'
+import { useUrl } from '@/hooks/useUrl'
 
 const config = {
 	// 默认地址请求地址，可在 .env.** 文件中修改
@@ -76,6 +77,17 @@ class RequestHttp {
 				}
 				// 全局错误信息拦截（防止下载文件的时候返回数据流，没有 code 直接报错）
 				if (data.code && data.code !== ResultEnum.SUCCESS) {
+					// 检测到多端登录或用户未登录
+					if (data.code === 401) {
+						showDialog({
+							title: '提示',
+							message: '检测到您多端登录或暂未登录，请先进行授权登录操作'
+						}).then(async () => {
+							localStorage.clear()
+							location.href = useUrl()
+						})
+					}
+					// 其他错误信息
 					showNotify({ type: 'danger', message: data.message })
 					return Promise.reject(data)
 				}

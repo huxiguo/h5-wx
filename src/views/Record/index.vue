@@ -19,6 +19,7 @@ const searchForm = ref({
 
 onMounted(() => {
 	if (recordStore.selectDate === '') {
+		console.log(123)
 		getNowFormatDate()
 		recordStore.getAllRecordAction(searchForm.value)
 	}
