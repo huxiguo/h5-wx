@@ -1,20 +1,19 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/modules/user'
+import axios from 'axios'
 const router = useRouter()
-const userStore = useUserStore()
 const name = ref()
 const unitsName = ref()
 const stuNo = ref()
 const time = ref()
 const status = ref()
 const url = ref()
+const BASE_URL = import.meta.env.VITE_BASE_URL
 onMounted(async () => {
 	// 获取路由参数里面的schNo,stuTime
 	const { schNo, stuTime } = router.currentRoute.value.query
-	const res = await userStore.getInOutInfoAction(
-		schNo as string,
-		stuTime as string
-	)
+	// 配置axios
+	axios.defaults.baseURL = BASE_URL
+	const { data: res } = await axios.get(`/getRecordByOne/${schNo}/${stuTime}`)
 	name.value = res.user.name
 	const data = res.user.unitsName.split('|')
 	unitsName.value = data[data.length - 1]
