@@ -7,7 +7,7 @@ const stuNo = ref()
 const time = ref()
 const status = ref()
 const url = ref()
-const BASE_URL = import.meta.env.VITE_BASE_URL
+const BASE_URL = import.meta.env.VITE_API_URL
 onMounted(async () => {
 	// 获取路由参数里面的schNo,stuTime
 	const { schNo, stuTime } = router.currentRoute.value.query
