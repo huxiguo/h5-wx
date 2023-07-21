@@ -18,14 +18,12 @@ const maxDate = new Date(new Date().getFullYear(), 11, 31)
 
 // 发送请求的params参数
 const searchForm = ref({
-	startTime: new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
+	startTime: new Date(new Date().getTime() - 24 * 7 * 60 * 60 * 1000)
 })
 
 onMounted(() => {
-	if (recordStore.selectDate === '') {
-		getNowFormatDate()
-		recordStore.getAllRecordAction(searchForm.value)
-	}
+	getNowFormatDate()
+	recordStore.getAllRecordAction(searchForm.value)
 })
 
 // 日期选择器确认按钮回调
@@ -41,7 +39,7 @@ const onConfirm = ({ selectedValues }: any) => {
 
 // 获取七天前的日期
 const getNowFormatDate = () => {
-	const dataStr = new Date(new Date().getTime() - 168 * 60 * 60 * 1000)
+	const dataStr = new Date(new Date().getTime() - 24 * 7 * 60 * 60 * 1000)
 	let year = dataStr.getFullYear()
 	let month: string | number = dataStr.getMonth() + 1
 	let strDate: string | number = dataStr.getDate()
