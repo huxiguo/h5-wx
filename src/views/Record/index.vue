@@ -11,6 +11,10 @@ const router = useRouter()
 const showPicker = ref(false)
 // 是否在触发上拉刷新
 const loading = ref(false)
+// 日期选择器最小日期
+const minDate = new Date(2023, 0, 1)
+// 日期选择器最大日起
+const maxDate = new Date(new Date().getFullYear(), 11, 31)
 
 // 发送请求的params参数
 const searchForm = ref({
@@ -19,7 +23,6 @@ const searchForm = ref({
 
 onMounted(() => {
 	if (recordStore.selectDate === '') {
-		console.log(123)
 		getNowFormatDate()
 		recordStore.getAllRecordAction(searchForm.value)
 	}
@@ -27,6 +30,7 @@ onMounted(() => {
 
 // 日期选择器确认按钮回调
 const onConfirm = ({ selectedValues }: any) => {
+	recordStore.initializeData()
 	recordStore.selectDate = selectedValues.join('/')
 	showPicker.value = false
 	searchForm.value.startTime = new Date(
@@ -85,9 +89,7 @@ const getMoreRecord = () => {
 
 // 上拉刷新回调
 const onRefresh = () => {
-	recordStore.currentPage = 1
-	recordStore.isGetAll = false
-	recordStore.recordList = []
+	recordStore.initializeData()
 	recordStore.getAllRecordAction(searchForm.value)
 	loading.value = false
 }
@@ -112,7 +114,12 @@ const onRefresh = () => {
 			@click="showPicker = true"
 		/>
 		<van-popup v-model:show="showPicker" position="bottom">
-			<van-date-picker @confirm="onConfirm" @cancel="showPicker = false" />
+			<van-date-picker
+				@confirm="onConfirm"
+				@cancel="showPicker = false"
+				:min-date="minDate"
+				:max-date="maxDate"
+			/>
 		</van-popup>
 		<!-- 进出记录数据展示 -->
 		<div class="recordList">

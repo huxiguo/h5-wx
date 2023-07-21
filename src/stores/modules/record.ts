@@ -35,6 +35,12 @@ export const useRecordStore = defineStore(
 			}
 			isLoading.value = false
 		}
+		// 初始化部分数据（用于重新选择日期或下拉刷新）
+		function initializeData() {
+			recordList.value = []
+			isGetAll.value = false
+			currentPage.value = 1
+		}
 		return {
 			recordList,
 			total,
@@ -42,7 +48,8 @@ export const useRecordStore = defineStore(
 			currentPage,
 			pageSize,
 			isGetAll,
-			getAllRecordAction
+			getAllRecordAction,
+			initializeData
 		}
 	},
 	{
