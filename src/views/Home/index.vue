@@ -13,7 +13,9 @@ onMounted(async () => {
 	const { schNo, stuTime } = router.currentRoute.value.query
 	// 配置axios
 	axios.defaults.baseURL = BASE_URL
-	const { data: res } = await axios.get(`/getRecordByOne/${schNo}/${stuTime}`)
+	const { data: res } = await axios.get(
+		`/wx-server/getRecordByOne/${schNo}/${stuTime}`
+	)
 	name.value = res.user.name
 	const data = res.user.unitsName.split('|')
 	unitsName.value = data[data.length - 1]
